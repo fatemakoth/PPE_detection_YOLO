@@ -2,173 +2,335 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>ObjectDetection-YOLOv8</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PPEGuard — Detection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body{
-        font-family:Helvetica, sans-serif;
-        margin:0px;
-        padding:0px;
-        }
-        header.feature-box.right{
-        background-color:black;
-        color:white;
-        height:120px;
-        padding:5px;
-        text-align:right;
-        }
-        header.feature-box.below{
-        height:800px;
-        background-color:blue;
-        margin-top:-30px;
-        background-image:url("../static/images/front.png");
-        background-size:100%;
-        background-position:center;
-        }
-        ul{
-        list-style:none;
-        padding:0px;}
-        li{
-        display:inline-block;
-        background-color:gray;
-        border-radius:10px;
-        padding:10px;
-        margin:10px;
-        }
-        li:hover{
-        background-color:red;
-        margin:10px;
-        }
-        header a{
-        color:white;
-        text-decoration:none;
-        width:100%;
-        }
-        .details{
-        height:80px;
-        margin:40px;
-        padding:0px;
-        font-size:40px;
-        background-color:gray;
-        text-align:center;
-        color:black;
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #0a0f1e;
+            --card: #1a2235;
+            --accent: #22c55e;
+            --text: #f1f5f9;
+            --muted: #94a3b8;
+            --border: #1e2d40;
         }
 
-
-        .features{
-        background:white;
-        color:gray;
-        display:flex;
-        flex-direction:row;
-        padding:20px;
-
-        }
-        .features figure
-        {/*background:pink;*/
-        width:400px;
-        margin:auto;
-        text-align:center;
-        text-transform:uppercase;
-        }
-        .features figure img{
-        border-radius:10%;
-        width:400px;
-        }
-        div.main{
-        display:flex;
-        margin:40px;
-        letter-spacing:1px;
-        h1, h2, h3, h4, h5, h6 {
-          font-family: "Playfair Display";
-    letter-spacing: 5px;
-        }
-        }
-        .subpart2{
-        text-align:center;
-        text-transform:uppercase;
-        }
-        .subpart2 figure img{
-        border-radius:4%;
-        width:800px;
-        }
-        .contactpage{
-        margin:20px;
-        }
-        #textbox {
-       font-size: 18pt;
-        height: 42px;
-        width : 1000px;
-        }
-        #textboxes {
-       font-size: 18pt;
-        height: 42px;
-        width : 1000px;
-        }
-        footer{
-        background-color:black;
-        text-align:center;
-        margin:0px;
-        padding:0px;
-        color:white;
-        font-size:20px;
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 48px;
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-logo { font-size: 18px; font-weight: 700; }
+        .nav-logo span { color: var(--accent); }
+        .nav-links { display: flex; gap: 8px; list-style: none; }
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 18px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        .nav-links a:hover, .nav-links a.active { color: var(--text); background: var(--card); }
+
+        .hero {
+            flex: 1;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 80px 24px;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("../static/images/front.png") center/cover no-repeat;
+            opacity: 0.18;
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center, rgba(10,15,30,0.3) 0%, rgba(10,15,30,0.92) 100%);
+        }
+        .hero > * { position: relative; z-index: 1; }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(34,197,94,0.12);
+            border: 1px solid rgba(34,197,94,0.3);
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 6px 14px;
+            border-radius: 99px;
+            margin-bottom: 28px;
+        }
+        .badge::before {
+            content: '';
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+        h1 {
+            font-size: clamp(36px, 5vw, 60px);
+            font-weight: 700;
+            line-height: 1.15;
+            margin-bottom: 16px;
+        }
+        h1 span { color: var(--accent); }
+
+        .subtitle {
+            color: var(--muted);
+            font-size: 17px;
+            line-height: 1.7;
+            max-width: 480px;
+            margin-bottom: 56px;
+        }
+
+        .cards {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 36px 32px;
+            width: 280px;
+            text-align: left;
+            text-decoration: none;
+            color: var(--text);
+            transition: all 0.25s;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(34,197,94,0.1);
+        }
+
+        .card-icon {
+            width: 48px; height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 4px;
+        }
+        .icon-green { background: rgba(34,197,94,0.15); }
+        .icon-blue  { background: rgba(59,130,246,0.15); }
+
+        .card-title { font-size: 17px; font-weight: 600; }
+        .card-desc  { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+        .card-arrow {
+            margin-top: auto;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* DETECTION CLASSES */
+        .classes-section {
+            padding: 56px 48px 72px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        .section-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 28px;
+        }
+        .classes-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+        .class-tag {
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            border: 1px solid;
+        }
+        .tag-safe    { background: rgba(34,197,94,0.1);  border-color: rgba(34,197,94,0.3);  color: #4ade80; }
+        .tag-unsafe  { background: rgba(239,68,68,0.1);  border-color: rgba(239,68,68,0.3);  color: #f87171; }
+        .tag-neutral { background: rgba(59,130,246,0.1); border-color: rgba(59,130,246,0.3); color: #93c5fd; }
+
+        /* SAMPLE RESULTS */
+        .results-section {
+            padding: 0 48px 72px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .result-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .result-card:hover { transform: translateY(-4px); border-color: var(--accent); }
+        .result-card img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
+        .result-card-caption {
+            padding: 12px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ABOUT */
+        .about-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: center;
+            padding: 0 48px 72px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        .about-text p { color: var(--muted); font-size: 14px; line-height: 1.8; margin-bottom: 12px; }
+        .about-img {
+            width: 100%;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            display: block;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
-    <header class="feature-box right">
-        
-        <nav>
-            <ul>
-            <li><a href="/home">Home</a></li>
-            <li><a href="/FrontPage">Video/Image</a></li>
-            <li><a href="/webcam">LiveWebcam</a></li>
-            </ul>
-        </nav>
-    </header>
 
-    <header class="feature-box below">
-    </header>
+<nav>
+    <div class="nav-logo">PPE<span>Guard</span></div>
+    <ul class="nav-links">
+        <li><a href="/home" class="active">Home</a></li>
+        <li><a href="/FrontPage">Video / Image</a></li>
+        <li><a href="/webcam">Live Webcam</a></li>
+    </ul>
+</nav>
 
+<section class="hero">
+    <h1>PPE Safety<br><span>Detection</span></h1>
+    <p class="subtitle">A system that checks whether workers are wearing required safety gear using Personal Protective Equipment detection.</p>
 
-    <section class="details">
-        <h1>Sample Results</h1>
+    <div class="cards">
+        <a href="/FrontPage" class="card">
+            <div class="card-icon icon-green">📁</div>
+            <div class="card-title">Upload Video</div>
+            <div class="card-desc">Upload an existing video file and run frame-by-frame PPE detection.</div>
+            <div class="card-arrow">Get started →</div>
+        </a>
+        <a href="/webcam" class="card">
+            <div class="card-icon icon-blue">📷</div>
+            <div class="card-title">Live Webcam</div>
+            <div class="card-desc">Use your camera for real-time PPE compliance analysis.</div>
+            <div class="card-arrow">Open feed →</div>
+        </a>
+    </div>
+</section>
 
-    </section>
-    <section class="features">
-        <figure>
+<!-- DETECTION CLASSES -->
+<div class="classes-section">
+    <div class="section-label">Detection Classes</div>
+    <div class="section-title">What Gets Detected</div>
+    <div class="classes-grid">
+        <span class="class-tag tag-safe">Hardhat</span>
+        <span class="class-tag tag-safe">Mask</span>
+        <span class="class-tag tag-safe">Safety Vest</span>
+        <span class="class-tag tag-unsafe">NO-Hardhat</span>
+        <span class="class-tag tag-unsafe">NO-Mask</span>
+        <span class="class-tag tag-unsafe">NO-Safety Vest</span>
+        <span class="class-tag tag-neutral">Person</span>
+    </div>
+</div>
+
+<!-- SAMPLE RESULTS -->
+<div class="results-section">
+    <div class="section-label">Sample Results</div>
+    <div class="section-title">PPE Guard Model Output</div>
+    <div class="results-grid">
+        <div class="result-card">
             <img src="../static/images/1.png" alt="YOLOv8 Results 1">
-            <figcaption>YOLOv8 Results 1</figcaption>
-        </figure>
-        <figure>
-            <img src="../static/images/2.png" alt="YOLOv8 Results 2">
-            <figcaption>YOLOv8 Results 2</figcaption>
-        </figure>
-        <figure>
-            <img src="../static/images/3.png" alt="YOLOv8 Results 3">
-            <figcaption>YOLOv8 Results 3</figcaption>
-    </figure>
-    </section>
-    <div class="main">
-        <div class="subpart1">
-            <h1>PPE Safety Kit Object Detection</h1><br>
-            <h4>Overview</h4>
-            <p>This project aims to detect PPE safety kits (Personal Protective Equipment) using YOLO (You Only Look Once) object detection algorithm. The model can detect various types of equipment including 'Hardhat', 'Mask', 'NO-Hardhat', 'NO-Mask', 'NO-Safety Vest', 'Person', 'Safety Cone','Safety Vest', 'machinery', 'vehicle' .The target audience for this project includes individuals or organizations who want to ensure the safety of their employees or people working in hazardous environments.</p><br>
-            
-            <h4>Dataset</h4>
-            <p>We used the PPE detection dataset available on Roboflow for training our model. The dataset contains images of people wearing PPE equipment in different environments.Dataset is annotated and have classes = ['Hardhat', 'Mask', 'NO-Hardhat', 'NO-Mask', 'NO-Safety Vest', 'Person', 'Safety Cone','Safety Vest', 'machinery','vehicle'] . Training set contains 2.6k images , validation set contains 114 images and Testing set contains 82 images. Input dimensions of single image is 640x640</p><br>
-            
-            
-
+            <div class="result-card-caption">Result 1</div>
         </div>
+        <div class="result-card">
+            <img src="../static/images/2.png" alt="YOLOv8 Results 2">
+            <div class="result-card-caption">Result 2</div>
+        </div>
+        <div class="result-card">
+            <img src="../static/images/3.png" alt="YOLOv8 Results 3">
+            <div class="result-card-caption">Result 3</div>
+        </div>
+    </div>
+</div>
 
-      <div class="subpart2"><figure>
-      <img src="../static/images/1.png"  alt="Image Missing">
-          <figcaption>Sample Results</figcaption>
-        </figure>
-      </div>
-  </div>
+<!-- ABOUT -->
+<div class="about-row">
+    <div class="about-text">
+        <div class="section-label">About</div>
+        <div class="section-title">PPE Safety Kit Object Detection</div>
+        <p>The PPE Guard detects Personal protective equipment safety kits. The model identifies 8 classes: Hardhat, NO-Hardhat, Mask, NO-Mask, Safety Vest, NO-Safety Vest and Person. By leveraging real-time detection capabilities, this system can be applied in industries such as construction, manufacturing, and warehousing to reduce safety risks, automate compliance monitoring, and support proactive decision-making.</p>
+        <p>Trained on 2,600+ annotated images from Roboflow. Validation: 114 images. Test: 82 images.</p>
+    </div>
+    <img src="../static/images/1.png" alt="Sample detection" class="about-img">
+</div>
 
-
+</body>
+</html>

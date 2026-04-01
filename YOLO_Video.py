@@ -30,15 +30,16 @@ def video_detection(path_x):
                 print(t_size)
                 c2 = x1 + t_size[0], y1 - t_size[1] - 3
                 if class_name == 'Mask' or class_name == 'Hardhat' or class_name == 'Safety Vest':
-                    color=(0, 255,0)
+                    color = (0, 255, 0)        # green
 
                 elif class_name == 'NO-Hardhat' or class_name == 'NO-Mask' or class_name == 'NO-Safety Vest':
-                    color = (0,0,255)
+                    color = (0, 0, 255)        # red
 
                 elif class_name == 'machinery' or class_name == 'vehicle':
-                    color = (0, 149, 255)
+                    color = (0, 255, 255)      # yellow (BGR)
+
                 else:
-                    color = (85,45,255)
+                    color = (255, 255, 0)      # cyan (BGR)
                 if conf>0.5:
                     cv2.rectangle(img, (x1,y1), (x2,y2), color,3)
                     cv2.rectangle(img, (x1,y1), c2, color, -1, cv2.LINE_AA)  # filled

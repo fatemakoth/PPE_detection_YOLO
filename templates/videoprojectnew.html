@@ -2,93 +2,227 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Video</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Detection — PPEGuard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body{
-            color:white;
-            margin:0px;
-            padding:0px;
-        }
-        header.feature-box.top{
-        background-color:black;
-        height:100px;
-        margin:0px;
-        padding:20px;
-        text-align:center;
-        }
-        header.feature-box.second{
-        background-color:blue;
-        height:50px;
-        text-align:center;
-        margin-top:-25px;
-        }
-        .features{
-          background-color:black;
-          width: 900px;
-          height: 700px;
-          border-radius: 35px;
-          object-fit: contain;
-          margin:20px;
-        }
-        section.col-sm{
-          background-color:black;
-          width: 1000px;
-          height: 650px;
-          border-radius: 35px;
-          object-fit: contain;
-          margin:40px;
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #0a0f1e;
+            --surface: #111827;
+            --card: #1a2235;
+            --accent: #22c55e;
+            --accent2: #3b82f6;
+            --text: #f1f5f9;
+            --muted: #94a3b8;
+            --border: #1e2d40;
         }
 
-        img{
-          width: 900px;
-          height: 600px;
-          border-radius: 35px;
-          object-fit: contain;
-          margin:40px;
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
-        .new{
-        color:black;
-        margin:0px;
-        padding:10px;
-        background-color:green;
-        margin:0px;
-        margin-top:-10px;
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 48px;
+            background: rgba(10,15,30,0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-logo { font-size: 18px; font-weight: 700; color: var(--text); }
+        .nav-logo span { color: var(--accent); }
+        .nav-links { display: flex; gap: 8px; list-style: none; }
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 18px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        .nav-links a:hover, .nav-links a.active { color: var(--text); background: var(--card); }
+
+        .page-header {
+            text-align: center;
+            padding: 48px 24px 32px;
+        }
+        .page-header h1 { font-size: 30px; font-weight: 700; margin-bottom: 8px; }
+        .page-header p { color: var(--muted); font-size: 14px; }
+
+        .main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 0 24px 48px;
+            gap: 24px;
+            flex-wrap: wrap;
         }
 
+        .feed-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            width: 100%;
+            max-width: 900px;
+        }
+        .feed-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 22px;
+            border-bottom: 1px solid var(--border);
+        }
+        .feed-card-header .title { font-size: 14px; font-weight: 600; }
+        .feed-card-header .info { font-size: 12px; color: var(--muted); }
+        .feed-card img {
+            width: 100%;
+            display: block;
+            aspect-ratio: 16/9;
+            object-fit: contain;
+            background: #000;
+        }
+
+        /* UPLOAD FORM */
+        .upload-area {
+            padding: 22px;
+            border-top: 1px solid var(--border);
+        }
+        .upload-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--muted);
+            margin-bottom: 12px;
+        }
+        .upload-form {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .upload-form input[type="file"] {
+            flex: 1;
+            min-width: 0;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px 14px;
+            color: var(--text);
+            font-size: 13px;
+            font-family: inherit;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+        .upload-form input[type="file"]:hover { border-color: var(--accent2); }
+        .upload-form input[type="file"]::file-selector-button {
+            background: var(--card);
+            color: var(--text);
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-family: inherit;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .btn-run {
+            background: var(--accent);
+            color: #000;
+            font-weight: 600;
+            font-size: 13px;
+            padding: 10px 24px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .btn-run:hover { background: #16a34a; transform: translateY(-1px); }
+
+        .legend {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 22px;
+            width: 220px;
+            align-self: flex-start;
+            flex-shrink: 0;
+        }
+        .legend h3 { font-size: 13px; font-weight: 600; margin-bottom: 16px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+        .legend-item { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; font-size: 13px; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .dot-green { background: #00ff00; }
+        .dot-red { background: #ff0000; }
+        .dot-yellow { background: #ffff00; }
+        .dot-cyan { background: #00ffff; }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
-<header class="feature-box top">
-    <h1><strong>Object Detection using YOLOv8</strong></h1>
-</header>
-<header class="feature-box second">
-     <h1><strong>Output Video</strong></h1>
-</header>
 
-  <section class="col-sm " >
-          <img src="{{ url_for('video') }}"   alt="Upload video">
+<nav>
+    <div class="nav-logo">PPE<span>Guard</span></div>
+    <ul class="nav-links">
+        <li><a href="/home">Home</a></li>
+        <li><a href="/FrontPage" class="active">Video / Image</a></li>
+        <li><a href="/webcam">Live Webcam</a></li>
+    </ul>
+</nav>
 
-  </section>
-<section>
-    <div class="new" >
-      <form method = 'POST' enctype="multipart/form-data" style="align-content: center; text-align: center;display: flex;">
-        {{form.hidden_tag()}}
-        {{form.file(class_="custom-file-input")}}
+<div class="page-header">
+    <h1>Video Detection</h1>
+    <p>Upload a video file and run PPE detection frame by frame</p>
+</div>
 
-        <div>
-        <button type="submit" name="favorite" value="x" class="btnCustom">
-            Submit
-        </button>
-      </div>
-      </form>
+<div class="main">
+    <div class="feed-card">
+        <div class="feed-card-header">
+            <span class="title">Output Feed</span>
+            <span class="info">YOLOv8 &bull; conf &gt; 0.5</span>
+        </div>
+        <img src="{{ url_for('video') }}" alt="Detection output">
+
+        <div class="upload-area">
+            <span class="upload-label">Upload Video File</span>
+            <form method="POST" enctype="multipart/form-data" class="upload-form">
+                {{ form.hidden_tag() }}
+                {{ form.file(class_="custom-file-input") }}
+                <button type="submit" class="btn-run">Run Detection</button>
+            </form>
+        </div>
     </div>
 
-  </div>
-    </section>
+    <div class="legend">
+        <h3>Color Legend</h3>
+        <div class="legend-item"><div class="dot dot-green"></div> Hardhat / Mask / Safety Vest</div>
+        <div class="legend-item"><div class="dot dot-red"></div> NO-Hardhat / NO-Mask / NO-Vest</div>
+        <div class="legend-item"><div class="dot dot-yellow"></div> Machinery / Vehicle</div>
+        <div class="legend-item"><div class="dot dot-cyan"></div> Person / Safety Cone</div>
+    </div>
+</div>
+
+<footer>PPEGuard &mdash; Video Detection Mode</footer>
 
 </body>
 </html>
